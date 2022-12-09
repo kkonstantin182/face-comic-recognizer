@@ -1,3 +1,5 @@
+import tensorflow as tf
+
 class VGGBaseBlock(tf.keras.layers.Layer):
 
     """
