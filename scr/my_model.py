@@ -53,15 +53,16 @@ class VGGBlock(tf.keras.layers.Layer):
 
 class VGGModel(tf.keras.Model):
     
-    def __init__(self, n_classes=2):
+    def __init__(self, n_classes=2, drop_strength=0.2):
         super(VGGModel, self).__init__()
-        self.block_1 = VGGBlock(64, 3)
-        self.block_2 = VGGBlock(128, 3)
-        self.block_3 = VGGBlock(256, 3)
-        self.block_4 = VGGBlock(512, 3)
+        self.drop_strength = drop_strength
+        self.block_1 = VGGBlock(64, 3, drop_strength=self.drop_strength)
+        self.block_2 = VGGBlock(128, 3, drop_strength=self.drop_strength)
+        self.block_3 = VGGBlock(256, 3, drop_strength=self.drop_strength)
+        self.block_4 = VGGBlock(512, 3, drop_strength=self.drop_strength)
         self.flatten = tf.keras.layers.Flatten()
         self.fc = tf.keras.layers.Dense(256, activation='relu')
-        self.drop = tf.keras.layers.Dropout(rate=0.2)
+        self.drop = tf.keras.layers.Dropout(rate=self.drop_strength)
         self.classifier = tf.keras.layers.Dense(n_classes-1, activation='sigmoid')
     
     def call(self, input_tensor, training=False):
